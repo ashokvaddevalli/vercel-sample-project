@@ -1,0 +1,17 @@
+name: Create Preview URL message
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: ${{github.event.number}},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'PR link that will be deploy once the build successfully completed: \n  https://pr-${{github.event.number}}-iota.vercel.app'
+            })
